@@ -65,6 +65,10 @@ def handle_follow(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     """ TextMessage handler """
+    # LINE Bot のテストでエラーにならないようにするため see https://qiita.com/q_masa/items/c9db3e8396fb62cc64ed
+    if event.reply_token == "00000000000000000000000000000000":
+        return
+
     user_id = event.source.user_id
     input_text = event.message.text
 
@@ -108,6 +112,10 @@ def handle_location_message(event):
 @handler.add(MessageEvent, message=StickerMessage)
 def handle_sticker_message(event):
     """ StickerMessage handler - スタンプのハンドラ"""
+    # LINE Bot のテストでエラーにならないようにするため see https://qiita.com/q_masa/items/c9db3e8396fb62cc64ed
+    if event.reply_token == "ffffffffffffffffffffffffffffffff":
+        return
+
     line_bot_api.reply_message(
         event.reply_token,
         StickerSendMessage(package_id=event.message.package_id, sticker_id=event.message.sticker_id)
