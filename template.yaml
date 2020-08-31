@@ -26,50 +26,19 @@ Resources:
       Environment: {Variables: {
         LINE_CHANNEL_ACCESS_TOKEN: !Ref LineChannelAccessToken,
         LINE_CHANNEL_SECRET: !Ref LineChannelSecret,
-        IMAGE_S3_BUCKET: !Ref ImageBucket,
+#        IMAGE_S3_BUCKET: !Ref ImageBucket,
       }}
-      Policies:
-        - S3CrudPolicy:
-            BucketName: !Ref ImageBucket
+#      Policies:
+#        - S3CrudPolicy:
+#            BucketName: !Ref ImageBucket
       Events:
         API:
           Type: Api
           Properties:
             Path: /api_endpoint
             Method: post
-            RestApiId: !Ref EndpointAPI
-
-  EndpointAPI:
-    Type: AWS::Serverless::Api
-    Properties: {StageName: !Ref StageTag}
-
-  ImageBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      AccessControl: PublicRead
-      LifecycleConfiguration:
-        Rules:
-          - Status: Enabled
-            ExpirationInDays: 2
-  ImageBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      PolicyDocument:
-        Id: MyPolicy
-        Version: 2012-10-17
-        Statement:
-          - Sid: PublicReadForGetBucketObjects
-            Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref ImageBucket
-                - /*
-      Bucket: !Ref ImageBucket
 
 Outputs:
   ApiEndpointURL:
     Description: API Endpoint URL
-    Value: !Sub "https://${EndpointAPI}.execute-api.${AWS::Region}.amazonaws.com/${EndpointAPI.Stage}/api_endpoint"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${ServerlessRestApi.Stage}/api_endpoint"

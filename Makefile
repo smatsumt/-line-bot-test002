@@ -2,13 +2,17 @@
 #
 #
 
+-include .env
+AWS_DEFAULT_REGION?=ap-northeast-1
+
+
 deploy: samconfig.toml
 	sam build
-	sam deploy
+	sam deploy --region $(AWS_DEFAULT_REGION)
 
 samconfig.toml:
 	sam build
-	sam deploy -g --no-execute-changeset
+	sam deploy --region $(AWS_DEFAULT_REGION) -g --no-execute-changeset
 
 test:
 	PYTHONPATH=${PYTHONPAT}:$$(echo ./src/*) python -m pytest tests
