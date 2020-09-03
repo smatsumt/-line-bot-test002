@@ -6,3 +6,5 @@ samconfig.toml
 tmp
 work
 .env
+
+gcp-auth.json

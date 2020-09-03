@@ -14,6 +14,7 @@ Parameters:
   StageTag: {Type: "String", Description: "Lambda のエイリアス, API のステージに使用", Default: "Prod"}
   LineChannelAccessToken: {Type: "String", Description: "LINE のアクセストークン"}
   LineChannelSecret: {Type: "String", Description: "LINE のチャンネルシークレット"}
+  DialogflowProjectId: {Type: "String", Description: "Dialogflow のプロジェクト ID"}
 
 Resources:
   EndPointFunction:
@@ -26,6 +27,7 @@ Resources:
       Environment: {Variables: {
         LINE_CHANNEL_ACCESS_TOKEN: !Ref LineChannelAccessToken,
         LINE_CHANNEL_SECRET: !Ref LineChannelSecret,
+        DIALOGFLOW_PROJECT_ID: !Ref DialogflowProjectId,
 #        IMAGE_S3_BUCKET: !Ref ImageBucket,
       }}
 #      Policies:

@@ -15,8 +15,15 @@ from linebot.models import (
     FollowEvent, SourceUser,
 )
 
+from dialogflow_lib.detect_intent_texts import post_intent_texts
+
 line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', 'YOUR_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET', 'YOUR_CHANNEL_SECRET'))
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "gcp-auth.json"
+dialogflow_project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
+language_code = os.getenv('LANGUAGE_CODE', 'ja-JP')
+
 tmp_dir = Path(os.getenv("TMPDIR", "/tmp"))
 
 logger = logging.getLogger(__name__)
@@ -72,9 +79,15 @@ def handle_text_message(event):
     user_id = event.source.user_id
     input_text = event.message.text
 
+    try:
+        results = post_intent_texts(dialogflow_project_id, user_id, [input_text], language_code)
+        response_text = results[0]['fulfillment']
+    except:
+        response_text = "わかりませんでした。"
+
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=input_text)
+        TextSendMessage(text=response_text)
     )
 
 
