@@ -10,7 +10,7 @@ from linebot import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, ImageMessage, LocationMessage, StickerMessage,
-    TextSendMessage, ImageSendMessage, StickerSendMessage,
+    TextSendMessage, ImageSendMessage, StickerSendMessage, LocationSendMessage,
     QuickReply, QuickReplyButton, CameraAction, CameraRollAction, LocationAction,
     FollowEvent, SourceUser,
 )
@@ -115,10 +115,12 @@ def handle_location_message(event):
     """ LocationMessage handler """
     user_id = event.source.user_id
     address = event.message.address
+    lat = event.message.latitude
+    lng = event.message.longitude
 
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=f"入力された住所は{address}です")
+        LocationSendMessage(title="お店の場所", address=address, latitude=lat, longitude=lng)
     )
 
 
